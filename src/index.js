@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { loadPartialConfig } from '@babel/core';
 //import SeasonsDisplay from './SeasonsDisplay';
 
 class App extends Component {
@@ -8,14 +7,16 @@ class App extends Component {
         super(props);
         // Initialize State 
         this.state = { lat: null, errorMessage: '' };
-
-        window.navigator.geolocation.getCurrentPosition((position) => {
-            // Update State 
-            this.setState({ lat: position.coords.latitude });
-        }, (err) => {
-            this.setState({ errorMessage: err.message });
-        });
     }
+
+    componentDidMount() {
+        window.navigator.geolocation.getCurrentPosition(
+            // Update State 
+            position => this.setState({ lat: position.coords.latitude }),
+            (err) => this.setState({ errorMessage: err.message })
+        );
+    }
+
     // React requires us to define the render method
     render() {
         if (this.state.errorMessage && !this.state.lat) {
